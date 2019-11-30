@@ -2,6 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:theme_provider/theme_provider.dart';
 
+class Game extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: <Widget>[
+          Image.network(
+              'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+              width: 150),
+          SizedBox(height: 6),
+          Text(
+            "POOL",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.rupeeSign,
+                size: 12,
+                color: Colors.green[300],
+              ),
+              Text(
+                "5,463",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Colors.green[300],
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Wrap(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  Text(
+                    "₹546546 Won This Week",
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4), color: Colors.white),
+    );
+  }
+}
+
 class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,624 +109,93 @@ class HomeContent extends StatelessWidget {
                       childAspectRatio: (itemWidth / itemHeight),
                       crossAxisCount: 3,
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              Image.network(
-                                  'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
-                                  width: 150),
-                              SizedBox(height: 6),
-                              Text(
-                                "POOL",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12,color: Colors.black),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 12,
-                                    color: Colors.green[300],
-                                  ),
-                                  Text(
-                                    "5,463",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      color: Colors.green[300],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: <Widget>[
-                                      Text(
-                                        "₹546546 Won This Week",
-                                        style: TextStyle(fontSize: 12,color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                        ),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
                       ],
                     ),
                   ),
                 ],
-              )
+              ),
+              //Banner After 6 Games...
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          'https://daunergames.com/wp-content/uploads/2018/06/20180409061231_PromotionalBanner_llpool.jpg'),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter),
+                ),
+              ),
+              CustomScrollView(
+                shrinkWrap: true,
+                primary: false,
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverGrid.count(
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 4,
+                      childAspectRatio: (itemWidth / itemHeight),
+                      crossAxisCount: 3,
+                      children: <Widget>[
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              //Banner After 6 Games...
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          'https://daunergames.com/wp-content/uploads/2018/06/20180409061231_PromotionalBanner_llpool.jpg'),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter),
+                ),
+              ),
+              CustomScrollView(
+                shrinkWrap: true,
+                primary: false,
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverGrid.count(
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 4,
+                      childAspectRatio: (itemWidth / itemHeight),
+                      crossAxisCount: 3,
+                      children: <Widget>[
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                        Game(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

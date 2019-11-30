@@ -18,8 +18,8 @@ you will be forced to make time for your illness.
           imageFit: BoxFit.contain)
     ];
 
-    return Material(
-      child: StoryView(
+    return Scaffold(
+      body: StoryView(
         storyItems,
         controller: controller,
         inline: false,
