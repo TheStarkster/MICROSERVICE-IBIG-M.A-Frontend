@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ibig_play/components/utilities/custom_heading.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:ibig_play/components/pages/chat_details.dart';
 
 class Messages extends StatefulWidget {
   @override
@@ -14,6 +16,64 @@ class _MessageState extends State<Messages> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              CustomHeading(
+                title: 'Groups',
+              ),
+              Container(
+                height: 140,
+                child: ListView.builder(
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.all(15),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 78,
+                            height: 78,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomRight,
+                                stops: [0.1, 1],
+                                colors: [
+                                  Color(0xFF8C68EC),
+                                  Color(0xFF3E8DF3),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Icon(
+                              Icons.chat,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text(
+                              'Group Name',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle
+                                      .color),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              CustomHeading(
+                title: 'Messages',
+              ),
               ListView.builder(
                 itemCount: 3,
                 shrinkWrap: true,
@@ -24,11 +84,14 @@ class _MessageState extends State<Messages> {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: InkWell(
                       onTap: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatDetails()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatDetails()));
                       },
                       child: Container(
-                        margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                        padding: EdgeInsets.all(15),
+                        margin: EdgeInsets.fromLTRB(15, 3, 15, 3),
+                        padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -44,14 +107,15 @@ class _MessageState extends State<Messages> {
                           children: <Widget>[
                             Stack(
                               children: <Widget>[
-                                Container(
+                                Padding(
+                                  padding: EdgeInsets.only(left: 12),
                                   child: CircleAvatar(
                                     backgroundImage: NetworkImage(
                                         'https://i.pravatar.cc/11$index'),
-                                    minRadius: 35,
+                                    minRadius: 28,
                                     backgroundColor: Colors.grey[200],
                                   ),
-                                ),
+                                )
                               ],
                             ),
                             Padding(
@@ -66,7 +130,7 @@ class _MessageState extends State<Messages> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   Padding(

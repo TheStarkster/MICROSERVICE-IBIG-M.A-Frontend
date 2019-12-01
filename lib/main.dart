@@ -10,7 +10,12 @@ List<CameraDescription> cameras;
 Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
-  runApp(MyApp());
+  runApp(new MaterialApp(
+    home: new SplashScreen(),
+    routes: <String, WidgetBuilder>{
+      '/HomeScreen': (BuildContext context) => new MyApp()
+    },
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -113,6 +118,121 @@ AppTheme redTheme() {
       appBarTheme: AppBarTheme(color: Color(0xFFAE0202)),
     ),
   );
+}
+
+class EnterExitRoute extends PageRouteBuilder {
+  final Widget enterPage;
+  final Widget exitPage;
+  EnterExitRoute({this.exitPage, this.enterPage})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              enterPage,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              Stack(
+                children: <Widget>[
+                  SlideTransition(
+                    position: new Tween<Offset>(
+                      begin: const Offset(0.0, 0.0),
+                      end: const Offset(-1.0, 0.0),
+                    ).animate(animation),
+                    child: exitPage,
+                  ),
+                  SlideTransition(
+                    position: new Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: enterPage,
+                  )
+                ],
+              ),
+        );
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => new _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  void navigationPage() {
+    Navigator.popAndPushNamed(context,'/HomeScreen');
+  }
+
+  startTime() async {
+    var _duration = new Duration(seconds: 3);
+    return new Timer(_duration, navigationPage);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTime();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/bg.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 120.0,
+                    child: Image.asset(
+                      "assets/images/loginlogo.png",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  SizedBox(height: 5.0),
+                  Text(
+                    'IBIG',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Righteous-Regular',
+                        fontSize: 40,
+                        letterSpacing: 5),
+                  ),
+                  Text(
+                    'PLAY',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Righteous-Regular',
+                        fontSize: 24,
+                        letterSpacing: 10),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class LoginPage extends StatefulWidget {

@@ -161,12 +161,47 @@ class _OtherPageState extends State<OtherPage>
                 automaticallyImplyLeading: false,
                 title: Row(
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 14, right: 6),
-                      child: Icon(Icons.chat,
-                          color: Theme.of(context).accentIconTheme.color),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 14, right: 6),
+                            child: Icon(Icons.chat,
+                                color: Theme.of(context).accentIconTheme.color),
+                          ),
+                          Text("Chats"),
+                        ],
+                      ),
                     ),
-                    Text("Chats")
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 26),
+                            child: Icon(
+                              Icons.group,
+                              color: Theme.of(context).accentIconTheme.color,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 26),
+                            child: Icon(
+                              Icons.search,
+                              color: Theme.of(context).accentIconTheme.color,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 26),
+                            child: Icon(
+                              FontAwesomeIcons.ban,
+                              color: Theme.of(context).accentIconTheme.color,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
