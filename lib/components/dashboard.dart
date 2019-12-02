@@ -8,7 +8,7 @@ import 'package:ibig_play/components/leaderboard.dart';
 import 'package:ibig_play/components/history.dart';
 import 'package:ibig_play/components/pages/chats.dart';
 import 'package:ibig_play/components/wallet.dart';
-
+import 'package:ibig_play/components/profile.dart';
 class OtherPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   OtherPage(this.cameras);
@@ -93,10 +93,10 @@ class _OtherPageState extends State<OtherPage>
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => profile.Profile()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ThemeConsumer(child: Profile())));
                         },
                         child: CircleAvatar(
                           radius: 24,

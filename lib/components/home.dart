@@ -196,6 +196,115 @@ class HomeContent extends StatelessWidget {
                   ),
                 ],
               ),
+              //Host Game Play Container...
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Play With Friends",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(left: 8, right: 8),
+                            child: MaterialButton(
+                              color: Colors.green[300],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.add_circle,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                  ),
+                                  Text(
+                                    "Create",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .subtitle
+                                            .color),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(left: 8, right: 8),
+                            child: MaterialButton(
+                              color: Colors.blueGrey[300],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    FontAwesomeIcons.trophy,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                    size: 18,
+                                  ),
+                                  Text(
+                                    "Join",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .subtitle
+                                            .color),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(left: 8, right: 8),
+                            child: MaterialButton(
+                              color: Colors.blueGrey[300],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.history,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                  ),
+                                  Text(
+                                    "Active",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .subtitle
+                                            .color),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),

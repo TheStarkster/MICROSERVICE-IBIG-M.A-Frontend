@@ -165,7 +165,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   void navigationPage() {
-    Navigator.popAndPushNamed(context,'/HomeScreen');
+    Navigator.of(context).pushReplacementNamed('/HomeScreen');
   }
 
   startTime() async {
