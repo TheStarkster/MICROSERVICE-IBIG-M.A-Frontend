@@ -2,38 +2,111 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:ibig_play/components/home.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/dashboard.dart' as dashboard;
 
 List<CameraDescription> cameras;
 
-Future<Null> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
-  runApp(new MaterialApp(
-    home: new SplashScreen(),
-    routes: <String, WidgetBuilder>{
-      '/HomeScreen': (BuildContext context) => new MyApp()
-    },
-  ));
+// Future<Null> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   cameras = await availableCameras();
+//   runApp(new MaterialApp(
+//     home: new SplashScreen(),
+//     routes: <String, WidgetBuilder>{
+//       '/HomeScreen': (BuildContext context) => new MyApp()
+//     },
+//   ));
+// }
+void main() => runApp(ThemeProvider(
+    saveThemesOnChange: true,
+    loadThemeOnInit: true,
+    themes: <AppTheme>[
+      defaultTheme(),
+      redTheme(),
+      // AppTheme.light(),
+      amberAppTheme(),
+      AppTheme.dark(),
+    ],
+    child: MaterialApp(
+      home: MyApp(),
+    )));
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  void navigationPage() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (Route<dynamic> route) => false);
+  }
+
+  startTime() async {
+    var _duration = new Duration(seconds: 3);
+    return new Timer(_duration, navigationPage);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTime();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
-      saveThemesOnChange: true,
-      loadThemeOnInit: true,
-      themes: <AppTheme>[
-        defaultTheme(),
-        redTheme(),
-        AppTheme.light(),
-        amberAppTheme(),
-        AppTheme.dark(),
-      ],
-      child: MaterialApp(
-        home: ThemeConsumer(
-          child: LoginPage(),
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/bg.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(36.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 120.0,
+                      child: Image.asset(
+                        "assets/images/loginlogo.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      'IBIG',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Righteous-Regular',
+                          fontSize: 40,
+                          letterSpacing: 5),
+                    ),
+                    Text(
+                      'PLAY',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Righteous-Regular',
+                          fontSize: 24,
+                          letterSpacing: 10),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -86,7 +159,7 @@ AppTheme defaultTheme() {
           overline: TextStyle(color: Colors.white60)),
       dividerColor: Colors.white54,
       scaffoldBackgroundColor: Color(0xFF27024A),
-      buttonColor: Colors.amber,
+      buttonColor: Color(0xFF4A03AA),
       dialogBackgroundColor: Colors.grey,
       primaryColorDark: Color(0xFF320072),
       appBarTheme: AppBarTheme(color: Color(0xFF4A03AA)),
@@ -120,120 +193,84 @@ AppTheme redTheme() {
   );
 }
 
-class EnterExitRoute extends PageRouteBuilder {
-  final Widget enterPage;
-  final Widget exitPage;
-  EnterExitRoute({this.exitPage, this.enterPage})
-      : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              enterPage,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) =>
-              Stack(
-                children: <Widget>[
-                  SlideTransition(
-                    position: new Tween<Offset>(
-                      begin: const Offset(0.0, 0.0),
-                      end: const Offset(-1.0, 0.0),
-                    ).animate(animation),
-                    child: exitPage,
-                  ),
-                  SlideTransition(
-                    position: new Tween<Offset>(
-                      begin: const Offset(1.0, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: enterPage,
-                  )
-                ],
-              ),
-        );
-}
+// class SplashScreen extends StatefulWidget {
+//   @override
+//   _SplashScreenState createState() => new _SplashScreenState();
+// }
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => new _SplashScreenState();
-}
+// class _SplashScreenState extends State<SplashScreen> {
+//   void navigationPage() {
+//     Navigator.of(context).pushAndRemoveUntil(
+//         MaterialPageRoute(builder: (context) => LoginPage()),
+//         (Route<dynamic> route) => false);
+//   }
 
-class _SplashScreenState extends State<SplashScreen> {
-  void navigationPage() {
-    Navigator.of(context).pushReplacementNamed('/HomeScreen');
-  }
+//   startTime() async {
+//     var _duration = new Duration(seconds: 3);
+//     return new Timer(_duration, navigationPage);
+//   }
 
-  startTime() async {
-    var _duration = new Duration(seconds: 3);
-    return new Timer(_duration, navigationPage);
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     startTime();
+//   }
 
-  @override
-  void initState() {
-    super.initState();
-    startTime();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/bg.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 120.0,
-                    child: Image.asset(
-                      "assets/images/loginlogo.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  SizedBox(height: 5.0),
-                  Text(
-                    'IBIG',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Righteous-Regular',
-                        fontSize: 40,
-                        letterSpacing: 5),
-                  ),
-                  Text(
-                    'PLAY',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Righteous-Regular',
-                        fontSize: 24,
-                        letterSpacing: 10),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: SingleChildScrollView(
+//           child: Container(
+//             height: MediaQuery.of(context).size.height,
+//             width: MediaQuery.of(context).size.width,
+//             decoration: BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage("assets/images/bg.png"),
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(36.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: <Widget>[
+//                   SizedBox(
+//                     height: 120.0,
+//                     child: Image.asset(
+//                       "assets/images/loginlogo.png",
+//                       fit: BoxFit.contain,
+//                     ),
+//                   ),
+//                   SizedBox(height: 5.0),
+//                   Text(
+//                     'IBIG',
+//                     style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.white,
+//                         fontFamily: 'Righteous-Regular',
+//                         fontSize: 40,
+//                         letterSpacing: 5),
+//                   ),
+//                   Text(
+//                     'PLAY',
+//                     style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.white,
+//                         fontFamily: 'Righteous-Regular',
+//                         fontSize: 24,
+//                         letterSpacing: 10),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class LoginPage extends StatefulWidget {
   @override

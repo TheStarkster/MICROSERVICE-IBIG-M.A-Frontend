@@ -9,6 +9,7 @@ import 'package:ibig_play/components/history.dart';
 import 'package:ibig_play/components/pages/chats.dart';
 import 'package:ibig_play/components/wallet.dart';
 import 'package:ibig_play/components/profile.dart';
+
 class OtherPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   OtherPage(this.cameras);

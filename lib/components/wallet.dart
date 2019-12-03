@@ -300,46 +300,6 @@ class _WalletState extends State<Wallet> {
                           ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) =>
-                                  ThemeConsumer(child: ThemeDialog()));
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.color_lens,
-                                  color: Theme.of(context).cardColor ==
-                                          Color(0xFF6100E2)
-                                      ? Colors.black
-                                      : Theme.of(context)
-                                          .primaryIconTheme
-                                          .color,
-                                ),
-                              ),
-                              Text(
-                                "Themes",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .title
-                                        .color),
-                              ),
-                              Container(
-                                child: Divider(
-                                  color: Theme.of(context).dividerColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: EdgeInsets.all(12),
                         child: Row(

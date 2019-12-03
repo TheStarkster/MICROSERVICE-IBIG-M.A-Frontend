@@ -429,6 +429,27 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
+                    Image.asset(
+                      'assets/images/loginlogo.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "ALL",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
                     Image.network(
                       'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
                       width: 70,
@@ -552,7 +573,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
     return ThemeProvider(
       child: Scaffold(
         body: DefaultTabController(
-          length: 6,
+          length: 7,
           child: Column(
             children: <Widget>[
               Container(
@@ -566,6 +587,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
               Expanded(
                 child: Container(
                   child: TabBarView(children: [
+                    LeaderTabView(),
                     LeaderTabView(),
                     LeaderTabView(),
                     LeaderTabView(),

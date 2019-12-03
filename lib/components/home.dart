@@ -219,7 +219,7 @@ class HomeContent extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.only(left: 8, right: 8),
                             child: MaterialButton(
-                              color: Colors.green[300],
+                              color: Theme.of(context).buttonColor,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
