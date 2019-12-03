@@ -3,18 +3,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class Game extends StatelessWidget {
+  final String assetString;
+  final String gameName;
+  Game({this.assetString,this.gameName});
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          Image.network(
-              'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+          Image.asset(
+              assetString,
               width: 150),
           SizedBox(height: 6),
           Text(
-            "POOL",
+            gameName,
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
           ),
@@ -109,12 +112,12 @@ class HomeContent extends StatelessWidget {
                       childAspectRatio: (itemWidth / itemHeight),
                       crossAxisCount: 3,
                       children: <Widget>[
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
+                        Game(assetString: "assets/images/pool.png",gameName:"POOL"),
+                        Game(assetString: "assets/images/basket.png",gameName:"BASKET BALL"),
+                        Game(assetString: "assets/images/rummy.png",gameName:"RUMMY"),
+                        Game(assetString: "assets/images/candy.png",gameName:"CANDY CRUSH"),
+                        Game(assetString: "assets/images/archery.png",gameName:"ARCHERY"),
+                        Game(assetString: "assets/images/angrybirds.png",gameName:"ANGRY BIRDS"),
                       ],
                     ),
                   ),
@@ -147,12 +150,12 @@ class HomeContent extends StatelessWidget {
                       childAspectRatio: (itemWidth / itemHeight),
                       crossAxisCount: 3,
                       children: <Widget>[
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
+                        Game(assetString: "assets/images/Qapp.png",gameName:"QUES"),
+                        Game(assetString: "assets/images/riseup.png",gameName:"RISE UP"),
+                        Game(assetString: "assets/images/cricket.png",gameName:"CRICKET"),
+                        Game(assetString: "assets/images/bubble.png",gameName:"BUBBLE SHOOTER"),
+                        Game(assetString: "assets/images/spacemaker.png",gameName:"SPACE BREAKER"),
+                        Game(assetString: "assets/images/happyjump.png",gameName:"HAPPY JUMP"),
                       ],
                     ),
                   ),
@@ -185,12 +188,12 @@ class HomeContent extends StatelessWidget {
                       childAspectRatio: (itemWidth / itemHeight),
                       crossAxisCount: 3,
                       children: <Widget>[
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
-                        Game(),
+                        Game(assetString: "assets/images/ludo.png",gameName:"LUDO"),
+                        Game(assetString: "assets/images/carrace.png",gameName:"CAR RACE"),
+                        Game(assetString: "assets/images/fruit.png",gameName:"FRUIT CHOP"),
+                        Game(assetString: "assets/images/runner.jpg",gameName:"RUNNER"),
+                        Game(assetString: "assets/images/lodosnack.jpeg",gameName:"LUDO SNACK"),
+                        Game(assetString: "assets/images/trun.png",gameName:"TEMPLE RUN"),
                       ],
                     ),
                   ),
@@ -375,10 +378,10 @@ class _MostCardListState extends State<MostCardList> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          MCard(),
-          MCard(),
-          MCard(),
-          MCard(),
+          MCard(gameImage: "assets/images/fruit.png",gameName: "FRUIT CHOP",),
+          MCard(gameImage: "assets/images/rummy.png",gameName: "RUMMY",),
+          MCard(gameImage: "assets/images/archery.png",gameName: "ARCHERY",),
+          MCard(gameImage: "assets/images/cricket.png",gameName: "CRICKET",),
         ],
       ),
     );
@@ -386,6 +389,8 @@ class _MostCardListState extends State<MostCardList> {
 }
 
 class MCard extends StatelessWidget {
+  final String gameImage,gameName;
+  MCard({this.gameName,this.gameImage});
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -397,8 +402,8 @@ class MCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(4)),
             image: DecorationImage(
-                image: NetworkImage(
-                    'https://lh3.googleusercontent.com/eJ9OJnbRer1jjg5ZeNAnTXKcGd2B_NEqxCp2UsefcCABeFBaj_pNl_WKYBjup2GVGGc'),
+                image: AssetImage(
+                    gameImage),
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter),
           ),
@@ -443,15 +448,15 @@ class MCard extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(left: 12),
-                        child: Image.network(
-                          'https://lh3.googleusercontent.com/eJ9OJnbRer1jjg5ZeNAnTXKcGd2B_NEqxCp2UsefcCABeFBaj_pNl_WKYBjup2GVGGc',
+                        child: Image.asset(
+                          gameImage,
                           width: 50,
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 12),
                         child: Text(
-                          "FRUIT CHOP",
+                          gameName,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

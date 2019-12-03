@@ -47,6 +47,24 @@ flutter:
    - assets/images/PhonePe.png
    - assets/images/MobiKwik.png
    - assets/images/paytm.png
+   - assets/images/basket.png
+   - assets/images/rummy.png
+   - assets/images/candy.png
+   - assets/images/archery.png
+   - assets/images/angrybirds.png
+   - assets/images/Qapp.png
+   - assets/images/riseup.png
+   - assets/images/cricket.png
+   - assets/images/bubble.png
+   - assets/images/spacemaker.png
+   - assets/images/happyjump.png
+   - assets/images/ludo.png
+   - assets/images/carrace.png
+   - assets/images/pool.png
+   - assets/images/fruit.png
+   - assets/images/lodosnack.jpeg
+   - assets/images/runner.jpg
+   - assets/images/trun.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

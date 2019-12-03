@@ -443,6 +443,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
+          
           Tab(
             child: Container(
               alignment: Alignment.center,
@@ -471,12 +472,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                      'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+                    Image.asset(
+                      'assets/images/basket.png',
                       width: 70,
                     ),
                     Text(
-                      "POOL",
+                      "BASKET BALL",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.overline.color),
                     ),
@@ -492,12 +493,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                      'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+                    Image.asset(
+                      'assets/images/rummy.png',
                       width: 70,
                     ),
                     Text(
-                      "POOL",
+                      "RUMMY",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.overline.color),
                     ),
@@ -513,12 +514,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                      'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+                    Image.asset(
+                      'assets/images/candy.png',
                       width: 70,
                     ),
                     Text(
-                      "POOL",
+                      "CANDY",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.overline.color),
                     ),
@@ -534,12 +535,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                      'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+                    Image.asset(
+                      'assets/images/archery.png',
                       width: 70,
                     ),
                     Text(
-                      "POOL",
+                      "ARCHERY",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.overline.color),
                     ),
@@ -555,12 +556,264 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 padding: EdgeInsets.only(top: 5),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                      'https://i.pinimg.com/originals/91/57/ef/9157efb8306f24a414205f6ec622a61c.png',
+                    Image.asset(
+                      'assets/images/angrybirds.png',
                       width: 70,
                     ),
                     Text(
-                      "POOL",
+                      "ANGRY BIRDS",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/Qapp.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "QUES",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/riseup.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "RISE UP",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/cricket.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "CRICKET",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/bubble.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "BUBBLE SHOOTER",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/spacemaker.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "SPACE BREAKER",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/happyjump.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "HAPPY JUMP",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/ludo.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "LUDO",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/pool.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "CAR RACE",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/fruit.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "FRUIT CHOP",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/lodosnack.jpeg',
+                      width: 70,
+                    ),
+                    Text(
+                      "LUDO SNACK",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/runner.jpg',
+                      width: 70,
+                    ),
+                    Text(
+                      "RUNNER",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.overline.color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/trun.png',
+                      width: 70,
+                    ),
+                    Text(
+                      "TEMPLE RUN",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.overline.color),
                     ),
@@ -573,7 +826,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
     return ThemeProvider(
       child: Scaffold(
         body: DefaultTabController(
-          length: 7,
+          length: 19,
           child: Column(
             children: <Widget>[
               Container(
@@ -587,6 +840,18 @@ class _LeaderBoardState extends State<LeaderBoard> {
               Expanded(
                 child: Container(
                   child: TabBarView(children: [
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
+                    LeaderTabView(),
                     LeaderTabView(),
                     LeaderTabView(),
                     LeaderTabView(),
