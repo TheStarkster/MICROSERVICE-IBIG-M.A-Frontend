@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:ibig_play/models/messages.dart';
+import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/pages/messages.dart';
 import 'package:ibig_play/components/pages/status.dart';
@@ -7,15 +9,28 @@ import 'package:ibig_play/components/pages/camera.dart';
 
 class Chats extends StatefulWidget {
   final List<CameraDescription> cameras;
-  Chats(this.cameras);
+  Chats({this.cameras});
 
   @override
   _ChatsState createState() => _ChatsState();
 }
 
 class _ChatsState extends State<Chats> with SingleTickerProviderStateMixin {
+  // void GetMessages() async{
+  //   final messageModelState = Provider.of<Message>(context, listen:true);
+  //   if(!messageModelState.getIsMessageRead){
+  //     DbHandlers dbHandler_Obj = new DbHandlers();
+  //     var res = await dbHandler_Obj.GetMessagesFromTable();
+  //   }
+  // }
+  @override
+  void initState(){
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    // GetMessages();
+
     return ThemeProvider(
       child: Scaffold(
         body: DefaultTabController(
@@ -53,7 +68,7 @@ class _ChatsState extends State<Chats> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                   children: <Widget>[
                     Container(child: CameraScreen(widget.cameras)),
-                    Container(child: Messages()),
+                    Container(child: ChangeNotifierProvider(child: MessagesWidget(),builder: (_) => Message())),
                     Container(child: StatusScreen()),
                   ],
                 ),

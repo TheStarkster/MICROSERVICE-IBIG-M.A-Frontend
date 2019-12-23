@@ -1,23 +1,17 @@
 import 'dart:async';
-import 'package:camera/camera.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:ibig_play/components/home.dart';
+import 'package:http/http.dart' as http;
+import 'package:ibig_play/components/dashboard.dart';
+import 'package:ibig_play/models/messages.dart';
+import 'package:ibig_play/otp.dart' as OTP_Page;
+import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:ibig_play/components/dashboard.dart' as dashboard;
+import 'package:ibig_play/db_handlers/handler.dart';
 
-List<CameraDescription> cameras;
+// List<CameraDescription> cameras;
 
-// Future<Null> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   cameras = await availableCameras();
-//   runApp(new MaterialApp(
-//     home: new SplashScreen(),
-//     routes: <String, WidgetBuilder>{
-//       '/HomeScreen': (BuildContext context) => new MyApp()
-//     },
-//   ));
-// }
 void main() => runApp(ThemeProvider(
     saveThemesOnChange: true,
     loadThemeOnInit: true,
@@ -29,7 +23,7 @@ void main() => runApp(ThemeProvider(
       AppTheme.dark(),
     ],
     child: MaterialApp(
-      home: MyApp(),
+      home: MyApp()
     )));
 
 class MyApp extends StatefulWidget {
@@ -38,10 +32,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  void navigationPage() {
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => LoginPage()),
-        (Route<dynamic> route) => false);
+  bool isMessageRead = true;
+  void navigationPage() async{
+    var dbHandler = new DbHandlers();
+    var userPhone = await dbHandler.GetUserFromTable();
+    if(userPhone.toString() == "[]"){
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }else{
+      print(userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''));
+      print(userPhone[0].getOnline_id.toString());
+      var messageResponse = await http.get("http://18.219.197.206:2643/get-messages/"+userPhone[0].getOnline_id.toString());
+      if(messageResponse.body != "[]"){
+        for(var item in jsonDecode(messageResponse.body)){
+          await dbHandler.SaveMessageToTable(item["message"],int.parse(item["receiver"]), int.parse(item["sender"]), 0,0);
+        }
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),
+          (Route<dynamic> route) => false);
+      }
+    }
   }
 
   startTime() async {
@@ -193,85 +204,6 @@ AppTheme redTheme() {
   );
 }
 
-// class SplashScreen extends StatefulWidget {
-//   @override
-//   _SplashScreenState createState() => new _SplashScreenState();
-// }
-
-// class _SplashScreenState extends State<SplashScreen> {
-//   void navigationPage() {
-//     Navigator.of(context).pushAndRemoveUntil(
-//         MaterialPageRoute(builder: (context) => LoginPage()),
-//         (Route<dynamic> route) => false);
-//   }
-
-//   startTime() async {
-//     var _duration = new Duration(seconds: 3);
-//     return new Timer(_duration, navigationPage);
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     startTime();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: SingleChildScrollView(
-//           child: Container(
-//             height: MediaQuery.of(context).size.height,
-//             width: MediaQuery.of(context).size.width,
-//             decoration: BoxDecoration(
-//               image: DecorationImage(
-//                 image: AssetImage("assets/images/bg.png"),
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//             child: Padding(
-//               padding: const EdgeInsets.all(36.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: <Widget>[
-//                   SizedBox(
-//                     height: 120.0,
-//                     child: Image.asset(
-//                       "assets/images/loginlogo.png",
-//                       fit: BoxFit.contain,
-//                     ),
-//                   ),
-//                   SizedBox(height: 5.0),
-//                   Text(
-//                     'IBIG',
-//                     style: TextStyle(
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.white,
-//                         fontFamily: 'Righteous-Regular',
-//                         fontSize: 40,
-//                         letterSpacing: 5),
-//                   ),
-//                   Text(
-//                     'PLAY',
-//                     style: TextStyle(
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.white,
-//                         fontFamily: 'Righteous-Regular',
-//                         fontSize: 24,
-//                         letterSpacing: 10),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -287,7 +219,14 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     this.emailController.text = "";
   }
+//   Future<OTP> verifyUser(String phone) async {
+//   final response =  await http.get('http://18.219.197.206:2643/'+phone);
 
+//   if (response.statusCode == 200) {
+//     // If the call to the server was successful, parse the JSON.
+//     return OTP.fromJson(json.decode(response.body));
+//   }
+// }
   @override
   Widget build(BuildContext context) {
     final phoneField = TextField(
@@ -315,16 +254,22 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+    Future<String> receiverOtp(String phone) async{
+      var res = await http.get('http://18.219.197.206:2643/'+phone);
+      return jsonDecode(res.body)["otp"];
+    }
     final loginButon = MaterialButton(
       minWidth: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 10, left: 0, right: 0, bottom: 10),
-      onPressed: () {
+      onPressed: () async {
+        String otp = await receiverOtp(emailController.text);
+        print(otp);
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ThemeConsumer(child: dashboard.OtherPage(cameras)),
-          ),
-        );
+            context,
+            MaterialPageRoute(
+              builder: (_) => OTP_Page.Otp(otp: otp,phone: emailController.text)
+            )
+          );
       },
       color: Color(0xFFfccb30),
       shape: StadiumBorder(),
@@ -490,6 +435,20 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class OTP {
+  final String otp;
+
+  OTP({
+    @required this.otp,
+  });
+
+  factory OTP.fromJson(Map<String, dynamic> json) {
+    return OTP(
+      otp: json['otp'] as String,
     );
   }
 }

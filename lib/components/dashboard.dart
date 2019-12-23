@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ibig_play/main.dart';
+import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/home.dart';
 import 'package:ibig_play/components/leaderboard.dart';
@@ -9,10 +9,16 @@ import 'package:ibig_play/components/history.dart';
 import 'package:ibig_play/components/pages/chats.dart';
 import 'package:ibig_play/components/wallet.dart';
 import 'package:ibig_play/components/profile.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:ibig_play/models/messages.dart';
+import '../otp.dart';
 
 class OtherPage extends StatefulWidget {
   final List<CameraDescription> cameras;
-  OtherPage(this.cameras);
+  final String phone;
+  final isMessageRead;
+  OtherPage({this.cameras,this.phone,this.isMessageRead});
   @override
   _OtherPageState createState() => _OtherPageState();
 }
@@ -20,20 +26,43 @@ class OtherPage extends StatefulWidget {
 class _OtherPageState extends State<OtherPage>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
-
+  static WebSocketChannel channel;
   TabController _tabController;
-  List<Widget> _tabList = [
-    ThemeConsumer(child: HomeContent()),
-    ThemeConsumer(child: Recent()),
-    ThemeConsumer(child: LeaderBoard()),
-    ThemeConsumer(child: Chats(cameras)),
-    ThemeConsumer(child: Wallet()),
-  ];
-
+  List<Widget> _tabList;
+  List<Container> _messageList;
+  bool msg_seen;
   @override
   void initState() {
     super.initState();
+    msg_seen = widget.isMessageRead;
+    channel = IOWebSocketChannel.connect('ws://18.219.197.206:8080/'+ widget.phone);
+    _messageList = [];
+    _tabList = [
+    ThemeConsumer(child: HomeContent()),
+    ThemeConsumer(child: Recent()),
+    ThemeConsumer(child: LeaderBoard()),
+    ThemeConsumer(child: Chats(cameras: cameras)),
+    ThemeConsumer(child: Wallet()),
+  ];
+    final messageModelState = Provider.of<Message>(context, listen:false);
+    if(msg_seen){
+      print("msg_seen is true");
+      messageModelState.IsMessageRead(false);
+    }
     _tabController = TabController(vsync: this, length: _tabList.length);
+     channel.stream.listen((message){
+       print(message);
+      //  messageModelState.addMessage(message);
+        setState(() {
+          if(_currentIndex != 3){
+            msg_seen = !msg_seen;
+          }
+          // _messageList.insert(_messageList.length, 
+          //   Container(
+          //     child: Bubble(isMe: false,message: message)
+          // ));
+        });
+    });
   }
 
   @override
@@ -98,6 +127,7 @@ class _OtherPageState extends State<OtherPage>
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ThemeConsumer(child: Profile())));
+
                         },
                         child: CircleAvatar(
                           radius: 24,
@@ -189,17 +219,17 @@ class _OtherPageState extends State<OtherPage>
                           Padding(
                             padding: EdgeInsets.only(left: 26),
                             child: Icon(
-                              Icons.search,
+                              FontAwesomeIcons.ellipsisV,
                               color: Theme.of(context).accentIconTheme.color,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 26),
-                            child: Icon(
-                              FontAwesomeIcons.ban,
-                              color: Theme.of(context).accentIconTheme.color,
-                            ),
-                          )
+                          // Padding(
+                          //   padding: EdgeInsets.only(left: 26),
+                          //   child: Icon(
+                          //     FontAwesomeIcons.ban,
+                          //     color: Theme.of(context).accentIconTheme.color,
+                          //   ),
+                          // )
                         ],
                       ),
                     )
@@ -213,6 +243,9 @@ class _OtherPageState extends State<OtherPage>
               _currentIndex = position;
             });
             _tabController.animateTo(_currentIndex);
+            if(position == 3){
+              msg_seen = true;
+            }
           },
           items: [
             BottomNavigationBarItem(
@@ -252,10 +285,28 @@ class _OtherPageState extends State<OtherPage>
               ),
             ),
             BottomNavigationBarItem(
-              icon: new Icon(Icons.chat,
+              icon: Stack(
+                children: <Widget>[
+                  Icon(Icons.chat,
                   color: Theme.of(context).primaryIconTheme.color),
+                  Positioned(
+                    right: 0,
+                    child:Container(
+                      padding: EdgeInsets.all(1),
+                      constraints: BoxConstraints(
+                        maxHeight: 8,
+                        maxWidth: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: msg_seen ? Colors.transparent : Colors.red,
+                        borderRadius: BorderRadius.circular(6)
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               backgroundColor: Theme.of(context).accentColor,
-              activeIcon: new Icon(Icons.chat,
+              activeIcon: Icon(Icons.chat,
                   color: Theme.of(context).iconTheme.color),
               title: Text(
                 "Chats",
@@ -282,6 +333,90 @@ class _OtherPageState extends State<OtherPage>
           children: _tabList,
           physics: NeverScrollableScrollPhysics(),
         ),
+      ),
+    );
+  }
+}
+
+
+
+  class Bubble extends StatelessWidget {
+  final bool isMe;
+
+  final String message;
+
+  Bubble({this.message, this.isMe});
+
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      padding: isMe ? EdgeInsets.only(left: 40) : EdgeInsets.only(right: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  gradient: isMe
+                      ? LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          stops: [
+                              0.1,
+                              1
+                            ],
+                          colors: [
+                              Color(0xFFF6D365),
+                              Color(0xFFFDA085),
+                            ])
+                      : LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          stops: [
+                              0.1,
+                              1
+                            ],
+                          colors: [
+                              Color(0xFFEBF5FC),
+                              Color(0xFFEBF5FC),
+                            ]),
+                  borderRadius: isMe
+                      ? BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(15),
+                        )
+                      : BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                          bottomLeft: Radius.circular(0),
+                        ),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      message,
+                      textAlign: isMe ? TextAlign.end : TextAlign.start,
+                      style: TextStyle(
+                        color: isMe ? Colors.white : Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

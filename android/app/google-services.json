@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "770637677538",
+    "firebase_url": "https://ibig-play.firebaseio.com",
+    "project_id": "ibig-play",
+    "storage_bucket": "ibig-play.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770637677538:android:41b5519abfe72e9fef6fbb",
+        "android_client_info": {
+          "package_name": "com.example.ibig_play"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "770637677538-ncurijal5p93471qj87pv7lv9i3t76ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeT-YoX_mz7AXwPOhNnrPOT9oJcNcfcAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "770637677538-ncurijal5p93471qj87pv7lv9i3t76ha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
