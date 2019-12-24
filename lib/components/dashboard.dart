@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ibig_play/components/friendlist.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/home.dart';
@@ -18,7 +19,7 @@ class OtherPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   final String phone;
   final isMessageRead;
-  OtherPage({this.cameras,this.phone,this.isMessageRead});
+  OtherPage({this.cameras, this.phone, this.isMessageRead});
   @override
   _OtherPageState createState() => _OtherPageState();
 }
@@ -35,33 +36,34 @@ class _OtherPageState extends State<OtherPage>
   void initState() {
     super.initState();
     msg_seen = widget.isMessageRead;
-    channel = IOWebSocketChannel.connect('ws://18.219.197.206:8080/'+ widget.phone);
+    channel =
+        IOWebSocketChannel.connect('ws://18.219.197.206:8080/' + widget.phone);
     _messageList = [];
     _tabList = [
-    ThemeConsumer(child: HomeContent()),
-    ThemeConsumer(child: Recent()),
-    ThemeConsumer(child: LeaderBoard()),
-    ThemeConsumer(child: Chats(cameras: cameras)),
-    ThemeConsumer(child: Wallet()),
-  ];
-    final messageModelState = Provider.of<Message>(context, listen:false);
-    if(msg_seen){
+      ThemeConsumer(child: HomeContent()),
+      ThemeConsumer(child: Recent()),
+      ThemeConsumer(child: LeaderBoard()),
+      ThemeConsumer(child: Chats(cameras: cameras)),
+      ThemeConsumer(child: Wallet()),
+    ];
+    final messageModelState = Provider.of<Message>(context, listen: false);
+    if (msg_seen) {
       print("msg_seen is true");
       messageModelState.IsMessageRead(false);
     }
     _tabController = TabController(vsync: this, length: _tabList.length);
-     channel.stream.listen((message){
-       print(message);
+    channel.stream.listen((message) {
+      print(message);
       //  messageModelState.addMessage(message);
-        setState(() {
-          if(_currentIndex != 3){
-            msg_seen = !msg_seen;
-          }
-          // _messageList.insert(_messageList.length, 
-          //   Container(
-          //     child: Bubble(isMe: false,message: message)
-          // ));
-        });
+      setState(() {
+        if (_currentIndex != 3) {
+          msg_seen = !msg_seen;
+        }
+        // _messageList.insert(_messageList.length,
+        //   Container(
+        //     child: Bubble(isMe: false,message: message)
+        // ));
+      });
     });
   }
 
@@ -126,8 +128,8 @@ class _OtherPageState extends State<OtherPage>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ThemeConsumer(child: Profile())));
-
+                                  builder: (context) =>
+                                      ThemeConsumer(child: Profile())));
                         },
                         child: CircleAvatar(
                           radius: 24,
@@ -209,12 +211,20 @@ class _OtherPageState extends State<OtherPage>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 26),
-                            child: Icon(
-                              Icons.group,
-                              color: Theme.of(context).accentIconTheme.color,
+                          GestureDetector(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 26),
+                              child: Icon(
+                                Icons.group,
+                                color: Theme.of(context).accentIconTheme.color,
+                              ),
                             ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FriendList()));
+                            },
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 26),
@@ -243,7 +253,7 @@ class _OtherPageState extends State<OtherPage>
               _currentIndex = position;
             });
             _tabController.animateTo(_currentIndex);
-            if(position == 3){
+            if (position == 3) {
               msg_seen = true;
             }
           },
@@ -288,26 +298,25 @@ class _OtherPageState extends State<OtherPage>
               icon: Stack(
                 children: <Widget>[
                   Icon(Icons.chat,
-                  color: Theme.of(context).primaryIconTheme.color),
+                      color: Theme.of(context).primaryIconTheme.color),
                   Positioned(
                     right: 0,
-                    child:Container(
+                    child: Container(
                       padding: EdgeInsets.all(1),
                       constraints: BoxConstraints(
                         maxHeight: 8,
                         maxWidth: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: msg_seen ? Colors.transparent : Colors.red,
-                        borderRadius: BorderRadius.circular(6)
-                      ),
+                          color: msg_seen ? Colors.transparent : Colors.red,
+                          borderRadius: BorderRadius.circular(6)),
                     ),
                   ),
                 ],
               ),
               backgroundColor: Theme.of(context).accentColor,
-              activeIcon: Icon(Icons.chat,
-                  color: Theme.of(context).iconTheme.color),
+              activeIcon:
+                  Icon(Icons.chat, color: Theme.of(context).iconTheme.color),
               title: Text(
                 "Chats",
                 style: TextStyle(
@@ -338,9 +347,7 @@ class _OtherPageState extends State<OtherPage>
   }
 }
 
-
-
-  class Bubble extends StatelessWidget {
+class Bubble extends StatelessWidget {
   final bool isMe;
 
   final String message;

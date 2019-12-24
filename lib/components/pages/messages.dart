@@ -115,7 +115,7 @@ class _MessageState extends State<MessagesWidget> {
     bgcolor = Colors.black;
     // _searchStreamController = new StreamController();
     searchUserResultContainer = [];
-    userMessageCard = [UserMessageCard(phone: '9871731421', online_id: 43)];
+    userMessageCard = [];
     hint = "";
     _searchController = TextEditingController();
   }
@@ -132,7 +132,6 @@ class _MessageState extends State<MessagesWidget> {
       var res = await HTTP.get('http://18.219.197.206:2643/find-user/' + hint);
       if (res.statusCode == 200) {
         if (jsonDecode(res.body)["message"].length > 0) {
-          print(jsonDecode(res.body)["message"][0]);
           setState(() {
             for (var searchItem in jsonDecode(res.body)["message"]) {
               searchUserResultContainer.insert(
@@ -264,15 +263,13 @@ class _MessageState extends State<MessagesWidget> {
                             scrollDirection: Axis.vertical,
                             itemBuilder: (BuildContext context, int index) {
                               return UserMessageCard(
-                                  message: snapshot.data[index]["message"]
-                                      .toString(),
-                                  userid:
-                                      snapshot.data[index]["sender"].toString(),
-                                  isUnread:
-                                      snapshot.data[index]["read"].toString() ==
-                                              "0"
-                                          ? true
-                                          : false);
+                                  message: snapshot.data[index]["message"].toString(),
+                                  userid:snapshot.data[index]["sender"].toString(),
+                                  isUnread:snapshot.data[index]["read"].toString() == "0" ? true : false,
+                                  online_id: snapshot.data[index]["online_id"],
+                                  local_id: snapshot.data[index]["id"],
+                                  isRead: snapshot.data[index]["read"],
+                                );
                             },
                           );
                         } else {
@@ -291,24 +288,27 @@ class _MessageState extends State<MessagesWidget> {
 
 class UserMessageCard extends StatefulWidget {
   final String userid, message, phone;
-  final int online_id;
+  final int online_id,local_id,isRead;
   final bool isUnread;
 
   UserMessageCard(
-      {this.userid, this.message, this.phone, this.online_id, this.isUnread});
+      {this.userid, this.message, this.phone, this.online_id, this.isUnread,this.local_id,this.isRead});
   @override
   _UserMessageCard createState() => _UserMessageCard();
 }
 
 class _UserMessageCard extends State<UserMessageCard> {
   static String phone;
-  static int online_id;
+  static int online_id,local_id;
   bool local_isUnread;
+  List<int> online_ID, local_ID;
   @override
   void initState() {
     phone = widget.phone;
     online_id = widget.online_id;
     local_isUnread = widget.isUnread;
+    online_ID = [];
+    local_ID = [];
   }
 
   @override
@@ -316,12 +316,18 @@ class _UserMessageCard extends State<UserMessageCard> {
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: InkWell(
-        onTap: () {
+        onTap: () async{
           setState(() {
             local_isUnread = false;
           });
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => ChatDetails()));
+          DbHandlers obj = new DbHandlers();
+          online_ID.insert(0, widget.online_id);
+          local_ID.insert(0, widget.online_id);
+          if(widget.isRead == 0){
+            await obj.ReadMessage(online_ID, local_ID);
+          }
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(15, 3, 15, 3),
