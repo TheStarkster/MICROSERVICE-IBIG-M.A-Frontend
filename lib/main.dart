@@ -44,17 +44,16 @@ class _MyAppState extends State<MyApp> {
       var messageResponse = await http.get("http://18.219.197.206:2643/get-messages/"+userPhone[0].getOnline_id.toString());
       var requestResponse = await http.get("http://18.219.197.206:2643/get-requests/"+userPhone[0].getOnline_id.toString());
       print(requestResponse.body);
-      print(requestResponse.body.runtimeType);
       if(messageResponse.body != "[]"){
         for(var item in jsonDecode(messageResponse.body)){
           await dbHandler.SaveMessageToTable(item['id'],item["message"],int.parse(item["receiver"]), int.parse(item["sender"]), 0,0);
         }
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),
+          MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(request: requestResponse.body,phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),
           (Route<dynamic> route) => false);
       }else{
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),
+          MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(request: requestResponse.body,phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),
           (Route<dynamic> route) => false);
       }
     }

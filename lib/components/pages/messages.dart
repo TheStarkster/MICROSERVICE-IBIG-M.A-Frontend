@@ -90,7 +90,7 @@ class _UserContainerState extends State<UserContainer> {
                       jsonEncode({
                         "message": widget.sender_phone + " wants to text you",
                         "receiver_id": widget.online_id,
-                        "receiver": "/" + widget.phone,
+                        "receiver": "/" + widget.phone.split(" ").toList()[1],
                         "sender": widget.sender_id,
                         "code": "#<REQUEST>#",
                       }),

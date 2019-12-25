@@ -17,6 +17,12 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
+  Stream<String> bringRequests() async*{
+    DbHandlers obj = new DbHandlers();
+    var local_res = await obj.GetUserFromTable();
+    var res = await HTTP.get('http://18.219.197.206:2643/get-requests/'+local_res[0].online_id.toString());
+    yield res.body;
+  }
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
@@ -26,12 +32,30 @@ class _FriendListState extends State<FriendList> {
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
-            child: UserContainer(
-                phone: '9953579196',
-                name: 'unregistered',
-                req_online_id: 1,
-                online_id: 1,
-                channel: widget.channel)),
+          child: StreamBuilder(
+            stream: bringRequests(),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData){
+                return CircularProgressIndicator();
+              }else{
+                print(jsonDecode(snapshot.data)[0]["from"]);
+                // print(jsonDecode(snapshot.data)['from'].toString());
+                return UserContainer(
+                  channel: widget.channel,
+                  phone: jsonDecode(snapshot.data)[0]["from"].toString(),
+                  name: "Not Registered",
+                  online_id: int.parse(jsonDecode(snapshot.data)[0]["from"]),
+                );
+              }
+            },
+          ),
+        )
+            // child: UserContainer(
+            //     phone: '9953579196',
+            //     name: 'unregistered',
+            //     req_online_id: 1,
+            //     online_id: 1,
+            //     channel: widget.channel)),
       ),
     );
   }

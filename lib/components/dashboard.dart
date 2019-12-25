@@ -21,8 +21,9 @@ import '../otp.dart';
 class OtherPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   final String phone;
+  final String request;
   final isMessageRead;
-  OtherPage({this.cameras, this.phone, this.isMessageRead});
+  OtherPage({this.cameras, this.phone, this.isMessageRead,this.request});
   @override
   _OtherPageState createState() => _OtherPageState();
 }
@@ -44,7 +45,7 @@ class _OtherPageState extends State<OtherPage>
     var iOS = new IOSInitializationSettings();
     var initSetttings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSetttings);
-        // onSelectNotification: onSelectNotification);
+    // onSelectNotification: onSelectNotification);
     msg_seen = widget.isMessageRead;
     channel =
         IOWebSocketChannel.connect('ws://18.219.197.206:8080/' + widget.phone);
@@ -62,14 +63,15 @@ class _OtherPageState extends State<OtherPage>
     //   messageModelState.IsMessageRead(false);
     // }
     _tabController = TabController(vsync: this, length: _tabList.length);
-    channel.stream.listen((data) async{
+    channel.stream.listen((data) async {
       print(data);
       print(jsonDecode(data)["code"].runtimeType);
-      if(jsonDecode(data)["code"].toString() != "") {
+      if (jsonDecode(data)["code"].toString() != "") {
         print(jsonDecode(data)["code"]);
         DbHandlers obj = new DbHandlers();
         var res = await obj.GetUserFromTable();
-        await showNotification(res[0].phone,jsonDecode(data)["code"].toString());
+        await showNotification(
+            res[0].phone, jsonDecode(data)["message"].toString());
       }
       setState(() {
         if (_currentIndex != 3) {
@@ -94,14 +96,18 @@ class _OtherPageState extends State<OtherPage>
   //   );
   // }
 
-  showNotification(String sender,String message) async {
+  showNotification(String sender, String message) async {
     var android = new AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
         priority: Priority.High, importance: Importance.Max);
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android, iOS);
     await flutterLocalNotificationsPlugin.show(
-        0, 'Notification',message, platform,);
+      0,
+      'Notification',
+      message,
+      platform,
+    );
   }
 
   @override
@@ -265,9 +271,9 @@ class _OtherPageState extends State<OtherPage>
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>FriendList(
-                                                  channel: channel,
-                                                  phone: widget.phone),));
+                                    builder: (context) => FriendList(
+                                        channel: channel, phone: widget.phone),
+                                  ));
                             },
                           ),
                           Padding(
@@ -308,11 +314,11 @@ class _OtherPageState extends State<OtherPage>
               backgroundColor: Theme.of(context).accentColor,
               activeIcon: new Icon(Icons.home,
                   color: Theme.of(context).iconTheme.color),
-              title:  Text(
-                    'Home',
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.subtitle.color),
-                  ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.subtitle.color),
+              ),
             ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.history,
