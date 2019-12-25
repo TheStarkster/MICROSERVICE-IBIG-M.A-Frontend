@@ -119,7 +119,7 @@ class _OtpState extends State<Otp> {
                           print(jsonDecode(onlineID.body)["id"]);
                           print(widget.phone.split(" ").toList()[1]);
                           var dbHandler_obj = new DbHandlers();
-                          await dbHandler_obj.GetUserFromTable(ifnotExistThenSave: widget.phone.split(" ").toList()[1],online_id: int.parse(jsonDecode(onlineID.body)["id"]));
+                          await dbHandler_obj.GetUserFromTable(ifnotExistThenSave: widget.phone.split(" ").toList()[1],online_id: jsonDecode(onlineID.body)["id"]);
                           await dbHandler_obj.CreateMessageTable();
                           Navigator.push(
                             context,

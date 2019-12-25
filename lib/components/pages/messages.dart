@@ -90,7 +90,7 @@ class _UserContainerState extends State<UserContainer> {
                       jsonEncode({
                         "message": widget.sender_phone + " wants to text you",
                         "receiver_id": widget.online_id,
-                        "receiver": "/" + '9871721421',
+                        "receiver": "/" + widget.phone,
                         "sender": widget.sender_id,
                         "code": "#<REQUEST>#",
                       }),
@@ -169,7 +169,7 @@ class _MessageState extends State<MessagesWidget> {
                       phone: "+91 " + searchItem["phone"],
                       channel: widget.channel,
                       sender_id: localres[0].online_id,
-                      online_id: int.parse(searchItem["id"]),
+                      online_id: searchItem["id"],
                       sender_phone: localres[0].phone,
                       name: searchItem["fname"] == null
                           ? "Name Not Registred"
