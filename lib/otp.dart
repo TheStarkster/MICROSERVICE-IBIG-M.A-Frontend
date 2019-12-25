@@ -115,8 +115,11 @@ class _OtpState extends State<Otp> {
                         if(widget.otp == emailController.text){
                           var token = await _messaging.getToken();
                           var onlineID = await HTTP.get('http://18.219.197.206:2643/register-user/'+widget.phone.split(" ").toList()[1]+"/"+token);
+                          print(jsonDecode(onlineID.body));
+                          print(jsonDecode(onlineID.body)["id"]);
+                          print(widget.phone.split(" ").toList()[1]);
                           var dbHandler_obj = new DbHandlers();
-                          await dbHandler_obj.GetUserFromTable(ifnotExistThenSave: widget.phone.split(" ").toList()[1],online_id: jsonDecode(onlineID.body)["id"]);
+                          await dbHandler_obj.GetUserFromTable(ifnotExistThenSave: widget.phone.split(" ").toList()[1],online_id: int.parse(jsonDecode(onlineID.body)["id"]));
                           await dbHandler_obj.CreateMessageTable();
                           Navigator.push(
                             context,

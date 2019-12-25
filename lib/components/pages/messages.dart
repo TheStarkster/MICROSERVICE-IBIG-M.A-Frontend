@@ -5,18 +5,33 @@ import 'package:ibig_play/components/utilities/custom_heading.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/pages/chat_details.dart';
 import 'package:ibig_play/db_handlers/handler.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:http/http.dart' as HTTP;
 
 class UserContainer extends StatefulWidget {
-  final String name, phone, dp;
-  UserContainer({this.name, this.phone, this.dp});
+  final String name, phone, dp, sender_phone;
+  final int online_id, sender_id;
+  final WebSocketChannel channel;
+  UserContainer(
+      {this.name,
+      this.phone,
+      this.dp,
+      this.online_id,
+      this.sender_id,
+      this.sender_phone,
+      this.channel});
   @override
   _UserContainerState createState() => _UserContainerState();
 }
 
 class _UserContainerState extends State<UserContainer> {
   Future sendRequest(String phone) async {
-    await HTTP.get('http://18.219.197.206:2643/send-request/' + phone);
+    await HTTP.get('http://18.219.197.206:2643/send-request/' +
+        widget.online_id.toString() +
+        "/" +
+        widget.sender_id.toString() +
+        "/" +
+        widget.sender_phone);
   }
 
   String _buttontext;
@@ -32,66 +47,78 @@ class _UserContainerState extends State<UserContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // key: new Key(searchItem["id"].toString()),
-        width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.all(6),
+      margin: EdgeInsets.all(2),
+      height: 70,
+      color: Theme.of(context).cardColor,
+      child: Padding(
         padding: EdgeInsets.all(6),
-        margin: EdgeInsets.all(2),
-        height: 70,
-        color: Theme.of(context).cardColor,
-        child: Padding(
-            padding: EdgeInsets.all(6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 18),
-                  child: CircleAvatar(child: Text("user"), radius: 25),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(widget.name,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.subtitle.color)),
-                      Text(widget.phone,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.subtitle.color)),
-                    ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 18),
+              child: CircleAvatar(child: Text("user"), radius: 25),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(widget.name,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.subtitle.color)),
+                  Text(widget.phone,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.subtitle.color)),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 18, right: 12),
+                child: MaterialButton(
+                  child: Text(_buttontext, style: TextStyle(color: btntheme)),
+                  shape: StadiumBorder(
+                    side: BorderSide(color: btntheme),
                   ),
+                  onPressed: () {
+                    sendRequest(widget.phone);
+                    widget.channel.sink.add(
+                      jsonEncode({
+                        "message": widget.sender_phone + " wants to text you",
+                        "receiver_id": widget.online_id,
+                        "receiver": "/" + '9871721421',
+                        "sender": widget.sender_id,
+                        "code": "#<REQUEST>#",
+                      }),
+                    );
+                    setState(() {
+                      if (_buttontext == "Request") {
+                        _buttontext = "Sent";
+                        btntheme = Colors.lightGreen;
+                      } else {
+                        btntheme = Colors.blueAccent;
+                        _buttontext = "Request";
+                      }
+                    });
+                  },
                 ),
-                Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.only(left: 18, right: 12),
-                  child: MaterialButton(
-                    child: Text(_buttontext, style: TextStyle(color: btntheme)),
-                    shape: StadiumBorder(
-                      side: BorderSide(color: btntheme),
-                    ),
-                    onPressed: () {
-                      sendRequest(widget.phone);
-                      setState(() {
-                        if (_buttontext == "Request") {
-                          _buttontext = "Sent";
-                          btntheme = Colors.lightGreen;
-                        } else {
-                          btntheme = Colors.blueAccent;
-                          _buttontext = "Request";
-                        }
-                      });
-                    },
-                  ),
-                ))
-              ],
-            )));
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class MessagesWidget extends StatefulWidget {
+  final String phone;
+  final WebSocketChannel channel;
+  MessagesWidget({this.phone, this.channel});
   @override
   _MessageState createState() => _MessageState();
 }
@@ -130,6 +157,8 @@ class _MessageState extends State<MessagesWidget> {
     searchUserResultContainer.clear();
     if (hint != "") {
       var res = await HTTP.get('http://18.219.197.206:2643/find-user/' + hint);
+      DbHandlers obj = new DbHandlers();
+      var localres = await obj.GetUserFromTable();
       if (res.statusCode == 200) {
         if (jsonDecode(res.body)["message"].length > 0) {
           setState(() {
@@ -138,6 +167,10 @@ class _MessageState extends State<MessagesWidget> {
                   0,
                   UserContainer(
                       phone: "+91 " + searchItem["phone"],
+                      channel: widget.channel,
+                      sender_id: localres[0].online_id,
+                      online_id: int.parse(searchItem["id"]),
+                      sender_phone: localres[0].phone,
                       name: searchItem["fname"] == null
                           ? "Name Not Registred"
                           : searchItem["fname"]));
@@ -263,13 +296,19 @@ class _MessageState extends State<MessagesWidget> {
                             scrollDirection: Axis.vertical,
                             itemBuilder: (BuildContext context, int index) {
                               return UserMessageCard(
-                                  message: snapshot.data[index]["message"].toString(),
-                                  userid:snapshot.data[index]["sender"].toString(),
-                                  isUnread:snapshot.data[index]["read"].toString() == "0" ? true : false,
-                                  online_id: snapshot.data[index]["online_id"],
-                                  local_id: snapshot.data[index]["id"],
-                                  isRead: snapshot.data[index]["read"],
-                                );
+                                message:
+                                    snapshot.data[index]["message"].toString(),
+                                userid:
+                                    snapshot.data[index]["sender"].toString(),
+                                isUnread:
+                                    snapshot.data[index]["read"].toString() ==
+                                            "0"
+                                        ? true
+                                        : false,
+                                online_id: snapshot.data[index]["online_id"],
+                                local_id: snapshot.data[index]["id"],
+                                isRead: snapshot.data[index]["read"],
+                              );
                             },
                           );
                         } else {
@@ -288,18 +327,24 @@ class _MessageState extends State<MessagesWidget> {
 
 class UserMessageCard extends StatefulWidget {
   final String userid, message, phone;
-  final int online_id,local_id,isRead;
+  final int online_id, local_id, isRead;
   final bool isUnread;
 
   UserMessageCard(
-      {this.userid, this.message, this.phone, this.online_id, this.isUnread,this.local_id,this.isRead});
+      {this.userid,
+      this.message,
+      this.phone,
+      this.online_id,
+      this.isUnread,
+      this.local_id,
+      this.isRead});
   @override
   _UserMessageCard createState() => _UserMessageCard();
 }
 
 class _UserMessageCard extends State<UserMessageCard> {
   static String phone;
-  static int online_id,local_id;
+  static int online_id, local_id;
   bool local_isUnread;
   List<int> online_ID, local_ID;
   @override
@@ -316,7 +361,7 @@ class _UserMessageCard extends State<UserMessageCard> {
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: InkWell(
-        onTap: () async{
+        onTap: () async {
           setState(() {
             local_isUnread = false;
           });
@@ -325,7 +370,7 @@ class _UserMessageCard extends State<UserMessageCard> {
           DbHandlers obj = new DbHandlers();
           online_ID.insert(0, widget.online_id);
           local_ID.insert(0, widget.online_id);
-          if(widget.isRead == 0){
+          if (widget.isRead == 0) {
             await obj.ReadMessage(online_ID, local_ID);
           }
         },

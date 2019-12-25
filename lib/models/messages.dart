@@ -7,13 +7,13 @@ class Message with ChangeNotifier{
   String message;
   int read;
   int received;
-
   bool isMessageRead = true;
 
   Message({this.id, this.receiver, this.sender,this.message,this.read,this.received});
 
   String get newMessage => message;
   bool get getIsMessageRead => isMessageRead;
+  
   Object get messageObj => {
     "message":message,
     "sender":sender,
@@ -26,7 +26,6 @@ class Message with ChangeNotifier{
     receiver = _receiver;
     sender = _sender;
     read = _read;
-    
     notifyListeners();
   }
   void IsMessageRead(bool val){

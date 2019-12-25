@@ -6,10 +6,13 @@ import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/pages/messages.dart';
 import 'package:ibig_play/components/pages/status.dart';
 import 'package:ibig_play/components/pages/camera.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Chats extends StatefulWidget {
   final List<CameraDescription> cameras;
-  Chats({this.cameras});
+  final WebSocketChannel channel;
+  final String phone;
+  Chats({this.cameras,this.phone,this.channel});
 
   @override
   _ChatsState createState() => _ChatsState();
@@ -29,8 +32,6 @@ class _ChatsState extends State<Chats> with SingleTickerProviderStateMixin {
   }
   @override
   Widget build(BuildContext context) {
-    // GetMessages();
-
     return ThemeProvider(
       child: Scaffold(
         body: DefaultTabController(
@@ -68,7 +69,7 @@ class _ChatsState extends State<Chats> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                   children: <Widget>[
                     Container(child: CameraScreen(widget.cameras)),
-                    Container(child: ChangeNotifierProvider(child: MessagesWidget(),builder: (_) => Message())),
+                    Container(child: ChangeNotifierProvider(child: MessagesWidget(channel: widget.channel,phone: widget.phone),builder: (_) => Message())),
                     Container(child: StatusScreen()),
                   ],
                 ),

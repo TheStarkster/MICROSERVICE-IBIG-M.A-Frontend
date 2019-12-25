@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ibig_play/components/friendlist.dart';
+import 'package:ibig_play/components/friendrequest.dart';
+import 'package:ibig_play/db_handlers/handler.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/home.dart';
@@ -26,8 +29,9 @@ class OtherPage extends StatefulWidget {
 
 class _OtherPageState extends State<OtherPage>
     with SingleTickerProviderStateMixin {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   int _currentIndex = 0;
-  static WebSocketChannel channel;
+  WebSocketChannel channel;
   TabController _tabController;
   List<Widget> _tabList;
   List<Container> _messageList;
@@ -35,6 +39,12 @@ class _OtherPageState extends State<OtherPage>
   @override
   void initState() {
     super.initState();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings);
+        // onSelectNotification: onSelectNotification);
     msg_seen = widget.isMessageRead;
     channel =
         IOWebSocketChannel.connect('ws://18.219.197.206:8080/' + widget.phone);
@@ -43,18 +53,24 @@ class _OtherPageState extends State<OtherPage>
       ThemeConsumer(child: HomeContent()),
       ThemeConsumer(child: Recent()),
       ThemeConsumer(child: LeaderBoard()),
-      ThemeConsumer(child: Chats(cameras: cameras)),
+      ThemeConsumer(
+          child:
+              Chats(cameras: cameras, phone: widget.phone, channel: channel)),
       ThemeConsumer(child: Wallet()),
     ];
-    final messageModelState = Provider.of<Message>(context, listen: false);
-    if (msg_seen) {
-      print("msg_seen is true");
-      messageModelState.IsMessageRead(false);
-    }
+    // if (msg_seen) {
+    //   messageModelState.IsMessageRead(false);
+    // }
     _tabController = TabController(vsync: this, length: _tabList.length);
-    channel.stream.listen((message) {
-      print(message);
-      //  messageModelState.addMessage(message);
+    channel.stream.listen((data) async{
+      print(data);
+      print(jsonDecode(data)["code"].runtimeType);
+      if(jsonDecode(data)["code"].toString() != "") {
+        print(jsonDecode(data)["code"]);
+        DbHandlers obj = new DbHandlers();
+        var res = await obj.GetUserFromTable();
+        await showNotification(res[0].phone,jsonDecode(data)["code"].toString());
+      }
       setState(() {
         if (_currentIndex != 3) {
           msg_seen = !msg_seen;
@@ -67,6 +83,27 @@ class _OtherPageState extends State<OtherPage>
     });
   }
 
+  // Future onSelectNotification(String payload) {
+  //   debugPrint("payload : $payload");
+  //   showDialog(
+  //     context: context,
+  //     builder: (_) => new AlertDialog(
+  //       title: new Text('Notification'),
+  //       content: new Text('$payload'),
+  //     ),
+  //   );
+  // }
+
+  showNotification(String sender,String message) async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High, importance: Importance.Max);
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Notification',message, platform,);
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -75,6 +112,8 @@ class _OtherPageState extends State<OtherPage>
 
   @override
   Widget build(BuildContext context) {
+    // final messageModelState = Provider.of<Message>(context);
+    // print(messageModelState.messageObj);
     return ThemeConsumer(
       child: Scaffold(
         appBar: _currentIndex != 3
@@ -220,10 +259,15 @@ class _OtherPageState extends State<OtherPage>
                               ),
                             ),
                             onTap: () {
+                              print("channel");
+                              print(channel);
+                              print("channel");
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => FriendList()));
+                                      builder: (context) =>FriendList(
+                                                  channel: channel,
+                                                  phone: widget.phone),));
                             },
                           ),
                           Padding(
@@ -264,11 +308,11 @@ class _OtherPageState extends State<OtherPage>
               backgroundColor: Theme.of(context).accentColor,
               activeIcon: new Icon(Icons.home,
                   color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Home",
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.subtitle.color),
-              ),
+              title:  Text(
+                    'Home',
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.subtitle.color),
+                  ),
             ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.history,

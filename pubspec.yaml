@@ -17,6 +17,7 @@ dependencies:
   http:
   sqflite:
   firebase_messaging:
+  flutter_local_notifications:
   provider: ^3.0.0
 
   # The following adds the Cupertino Icons font to your application.

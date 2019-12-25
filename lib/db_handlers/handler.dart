@@ -17,9 +17,6 @@ class DbHandlers with ChangeNotifier{
   Future<void> ReadMessage(List<int> online_id,List<int> local_id) async{
     final Database db = await OpenDB();
     for(int id in local_id){
-      print("id");
-      print(id);
-      print("id");
       await db.update('messages', toMapMessageOnlyRead(1), where: 'id = '+id.toString());
     }
     await HTTP.post('http://18.219.197.206:2643/read-message',body: {
@@ -65,6 +62,16 @@ class DbHandlers with ChangeNotifier{
       }
     }
   }
+  // Future<Object> GetUser() async{
+  //   final Database db = await OpenDB();
+  //   List<Map<String, dynamic>> maps;
+  //   maps = await db.query('users');
+  //   return {
+  //     "id":maps[0]['id'],
+  //     "online_id":maps[0]['online_id'],
+  //     "phone":maps[0]['phone']
+  //   };
+  // }
   Future<void> CreateMessageTable() async{
     final Database db = await OpenDB();
     await db.execute('CREATE TABLE messages(id INTEGER PRIMARY KEY,online_id INTEGER, message TEXT, receiver INTEGER, sender INTEGER, read INTEGER,received INTEGER)');
@@ -73,9 +80,6 @@ class DbHandlers with ChangeNotifier{
     final Database db = await OpenDB();
     List<Map<String, dynamic>> maps;
     maps = await db.query('messages');
-    print(maps[0]['id']);
-    print(maps[0]['message']);
-    print(maps[0]['online_id']);
     for(var item in maps){
       await db.update('messages', toMapMessageOnlyReceived(1),where: 'id = '+item['id'].toString());//vulnurable here...
     }
@@ -127,8 +131,6 @@ class DbHandlers with ChangeNotifier{
   }
   Future<void> insertMessage(int online_id,String message, int receiver, int sender, int read,int received) async{
     final Database db = await OpenDB();
-    // print(toMapMessage(message, receiver, sender, read,received)["message"]);
-    // print(toMapMessage(message, receiver, sender, read,received)["read"]);
     await db.insert('messages', toMapMessage(online_id,message, receiver, sender, read,received),conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }
