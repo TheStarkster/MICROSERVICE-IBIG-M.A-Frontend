@@ -2,10 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-class Game extends StatelessWidget {
+class Game extends StatefulWidget {
   final String assetString;
   final String gameName;
   Game({this.assetString,this.gameName});
+
+  @override
+  _GameState createState() => _GameState();
+}
+
+class _GameState extends State<Game> with WidgetsBindingObserver{
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    print("intistate");
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+    print("dispose thing");
+  }
+
+  AppLifecycleState _notification;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() { _notification = state; });
+    print("didChangeAppLifecycleState");
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,11 +40,11 @@ class Game extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset(
-              assetString,
+              widget.assetString,
               width: 150),
           SizedBox(height: 6),
           Text(
-            gameName,
+            widget.gameName,
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
           ),

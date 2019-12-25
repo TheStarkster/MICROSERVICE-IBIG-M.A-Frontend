@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ibig_play/components/friendrequest.dart';
 import 'package:ibig_play/db_handlers/handler.dart';
-import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/home.dart';
 import 'package:ibig_play/components/leaderboard.dart';
@@ -15,7 +14,6 @@ import 'package:ibig_play/components/wallet.dart';
 import 'package:ibig_play/components/profile.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:ibig_play/models/messages.dart';
 import '../otp.dart';
 
 class OtherPage extends StatefulWidget {
@@ -29,7 +27,7 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin{
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   int _currentIndex = 0;
   WebSocketChannel channel;
@@ -59,9 +57,7 @@ class _OtherPageState extends State<OtherPage>
               Chats(cameras: cameras, phone: widget.phone, channel: channel)),
       ThemeConsumer(child: Wallet()),
     ];
-    // if (msg_seen) {
-    //   messageModelState.IsMessageRead(false);
-    // }
+
     _tabController = TabController(vsync: this, length: _tabList.length);
     channel.stream.listen((data) async {
       print(data);
@@ -72,29 +68,16 @@ class _OtherPageState extends State<OtherPage>
         var res = await obj.GetUserFromTable();
         await showNotification(
             res[0].phone, jsonDecode(data)["message"].toString());
+        
+        // obj.insertMessage(online_id, jsonDecode(data)["message"].toString(), res[0].online_id, int.parse(jsonDecode(data)["message"]), 0, 1);
       }
       setState(() {
         if (_currentIndex != 3) {
           msg_seen = !msg_seen;
         }
-        // _messageList.insert(_messageList.length,
-        //   Container(
-        //     child: Bubble(isMe: false,message: message)
-        // ));
       });
     });
   }
-
-  // Future onSelectNotification(String payload) {
-  //   debugPrint("payload : $payload");
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) => new AlertDialog(
-  //       title: new Text('Notification'),
-  //       content: new Text('$payload'),
-  //     ),
-  //   );
-  // }
 
   showNotification(String sender, String message) async {
     var android = new AndroidNotificationDetails(
@@ -118,8 +101,6 @@ class _OtherPageState extends State<OtherPage>
 
   @override
   Widget build(BuildContext context) {
-    // final messageModelState = Provider.of<Message>(context);
-    // print(messageModelState.messageObj);
     return ThemeConsumer(
       child: Scaffold(
         appBar: _currentIndex != 3

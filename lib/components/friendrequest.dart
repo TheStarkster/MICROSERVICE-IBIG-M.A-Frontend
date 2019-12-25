@@ -17,59 +17,88 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
-  Stream<String> bringRequests() async*{
+  Stream<String> bringRequests() async* {
     DbHandlers obj = new DbHandlers();
     var local_res = await obj.GetUserFromTable();
-    var res = await HTTP.get('http://18.219.197.206:2643/get-requests/'+local_res[0].online_id.toString());
+    var res = await HTTP.get('http://18.219.197.206:2643/get-requests/' +
+        local_res[0].online_id.toString());
     yield res.body;
   }
+
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Friend Requests"),
-        ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: SingleChildScrollView(
-          child: StreamBuilder(
-            stream: bringRequests(),
-            builder: (context, snapshot) {
-              if(!snapshot.hasData){
-                return CircularProgressIndicator();
-              }else{
-                print(jsonDecode(snapshot.data)[0]["from"]);
-                // print(jsonDecode(snapshot.data)['from'].toString());
-                return UserContainer(
-                  channel: widget.channel,
-                  phone: jsonDecode(snapshot.data)[0]["from"].toString(),
-                  name: "Not Registered",
-                  online_id: int.parse(jsonDecode(snapshot.data)[0]["from"]),
-                );
-              }
-            },
+          appBar: AppBar(
+            title: Text("Friend Requests"),
           ),
-        )
-            // child: UserContainer(
-            //     phone: '9953579196',
-            //     name: 'unregistered',
-            //     req_online_id: 1,
-            //     online_id: 1,
-            //     channel: widget.channel)),
-      ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height,
+              child: StreamBuilder(
+                stream: bringRequests(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        )
+                      ],
+                    );
+                  } else {
+                    // print(jsonDecode(snapshot.data));
+                    if (snapshot.data != "[]") {
+                      return UserContainer(
+                        channel: widget.channel,
+                        phone: jsonDecode(snapshot.data)[0]["from"].toString(),
+                        name: "Not Registered",
+                        online_id:
+                            int.parse(jsonDecode(snapshot.data)[0]["from"]),
+                        requester_phone: jsonDecode(snapshot.data)[0]
+                                ["phone_of_from"]
+                            .toString(),
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            child: Text("No Requests at the Moment"),
+                            padding: EdgeInsets.all(20),
+                          )
+                        ],
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
+          )
+          // child: UserContainer(
+          //     phone: '9953579196',
+          //     name: 'unregistered',
+          //     req_online_id: 1,
+          //     online_id: 1,
+          //     channel: widget.channel)),
+          ),
     );
   }
 }
 
 class UserContainer extends StatefulWidget {
-  final String name, phone, dp;
-  final int req_online_id, online_id;
+  final String name, phone, dp, requester_phone;
+  final int online_id;
   final WebSocketChannel channel;
   UserContainer(
       {this.name,
+      this.requester_phone,
       this.phone,
       this.dp,
-      this.req_online_id,
       this.online_id,
       this.channel});
   @override
@@ -137,12 +166,28 @@ class _UserContainerState extends State<UserContainer> {
                     DbHandlers obj = new DbHandlers();
                     var res = await obj.GetUserFromTable();
                     // messageModelState.addMessage(res[0].phone+" accepted yor request start chatting now ✌", widget.online_id, res[0].online_id, 0);
-                    print(widget.channel);
+                    var body = jsonEncode({
+                      "data": {
+                          "message": res[0].phone +
+                              " accepted yor request start chatting now ✌",
+                          "receiver": widget.online_id.toString(),
+                          "sender": res[0].online_id.toString(),
+                      }
+                    });
+                    var saveMessageres = await HTTP
+                        .post('http://18.219.197.206:2643/save-message', body: body);
+                    
+                    print("body");
+                    print(body);
+                    print(body.runtimeType);
+                    print("body");
+                    print(saveMessageres.body);
                     widget.channel.sink.add(
                       jsonEncode({
-                        "message": res[0].phone + " accepted yor request start chatting now ✌",
+                        "message": res[0].phone +
+                            " accepted yor request start chatting now ✌",
                         "receiver_id": widget.online_id,
-                        "receiver": "/" + '9871721421',
+                        "receiver": "/" + widget.requester_phone,
                         "sender": res[0].online_id,
                         "code": "#<ACCEPTED>#"
                       }),

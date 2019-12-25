@@ -71,6 +71,7 @@ flutter:
    - assets/images/lodosnack.jpeg
    - assets/images/runner.jpg
    - assets/images/trun.png
+   - assets/images/empty.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
