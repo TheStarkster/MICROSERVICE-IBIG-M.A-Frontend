@@ -107,8 +107,11 @@ class UserContainer extends StatefulWidget {
 
 class _UserContainerState extends State<UserContainer> {
   Future acceptRequest(int id) async {
-    await HTTP
+    var res = await HTTP
         .get('http://18.219.197.206:2643/accept-request/' + id.toString());
+    print("res.bodyres.bodyres.bodyres.bodyres.bodyres.body");
+    print(res.body);
+    print("res.bodyres.bodyres.bodyres.bodyres.bodyres.body");
   }
 
   List<Container> messageList;
@@ -174,18 +177,17 @@ class _UserContainerState extends State<UserContainer> {
                           "sender": res[0].online_id.toString(),
                       }
                     });
-                    var saveMessageres = await HTTP
-                        .post('http://18.219.197.206:2643/save-message', body: body);
+                    // var saveMessageres = await HTTP
+                    //     .post('http://18.219.197.206:2643/save-message', body: {"data":"njnkjnjnk"});
                     
-                    print("body");
-                    print(body);
-                    print(body.runtimeType);
-                    print("body");
-                    print(saveMessageres.body);
+                    // print("body");
+                    // print(body);
+                    // print(body.runtimeType);
+                    // print("body");
+                    // print(saveMessageres.body);
                     widget.channel.sink.add(
                       jsonEncode({
-                        "message": res[0].phone +
-                            " accepted yor request start chatting now ✌",
+                        "message": res[0].phone + " accepted yor request start chatting now ✌",
                         "receiver_id": widget.online_id,
                         "receiver": "/" + widget.requester_phone,
                         "sender": res[0].online_id,

@@ -305,6 +305,7 @@ class _MessageState extends State<MessagesWidget> {
                                             "0"
                                         ? true
                                         : false,
+                                channel: widget.channel,
                                 online_id: snapshot.data[index]["online_id"],
                                 local_id: snapshot.data[index]["id"],
                                 isRead: snapshot.data[index]["read"],
@@ -327,11 +328,13 @@ class _MessageState extends State<MessagesWidget> {
 
 class UserMessageCard extends StatefulWidget {
   final String userid, message, phone;
+  final WebSocketChannel channel;
   final int online_id, local_id, isRead;
   final bool isUnread;
 
   UserMessageCard(
       {this.userid,
+      this.channel,
       this.message,
       this.phone,
       this.online_id,
@@ -366,7 +369,7 @@ class _UserMessageCard extends State<UserMessageCard> {
             local_isUnread = false;
           });
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ChatDetails()));
+              context, MaterialPageRoute(builder: (context) => ChatDetails(channel: widget.channel,receiver_id: int.parse(widget.userid),ownerPhone: widget.phone,)));
           DbHandlers obj = new DbHandlers();
           online_ID.insert(0, widget.online_id);
           local_ID.insert(0, widget.online_id);

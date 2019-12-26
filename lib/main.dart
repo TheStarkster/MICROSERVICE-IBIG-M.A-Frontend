@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp>{
       print(requestResponse.body);
       if(messageResponse.body != "[]"){
         for(var item in jsonDecode(messageResponse.body)){
-          await dbHandler.SaveMessageToTable(item['id'],item["message"],int.parse(item["receiver"]), int.parse(item["sender"]), 0,0);
+          await dbHandler.SaveMessageToTable(item['id'],item["message"],int.parse(item["receiver"]), int.parse(item["sender"]), 0,0,item['sender_phone']);
         }
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => ThemeConsumer(child: ChangeNotifierProvider(child: OtherPage(request: requestResponse.body,phone: userPhone.toString().replaceAll(new RegExp(r'[^\w\s]+'),''),isMessageRead: messageResponse.body == "[]" ? true: false),builder: (_) => Message(),))),

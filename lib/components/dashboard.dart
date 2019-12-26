@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:ibig_play/components/friendrequest.dart';
 import 'package:ibig_play/db_handlers/handler.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -14,6 +15,7 @@ import 'package:ibig_play/components/wallet.dart';
 import 'package:ibig_play/components/profile.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:http/http.dart' as HTTP;
 import '../otp.dart';
 
 class OtherPage extends StatefulWidget {
@@ -21,19 +23,20 @@ class OtherPage extends StatefulWidget {
   final String phone;
   final String request;
   final isMessageRead;
-  OtherPage({this.cameras, this.phone, this.isMessageRead,this.request});
+  OtherPage({this.cameras, this.phone, this.isMessageRead, this.request});
   @override
   _OtherPageState createState() => _OtherPageState();
 }
 
 class _OtherPageState extends State<OtherPage>
-    with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   int _currentIndex = 0;
   WebSocketChannel channel;
   TabController _tabController;
   List<Widget> _tabList;
   List<Container> _messageList;
+  Response messageSaveRes;
   bool msg_seen;
   @override
   void initState() {
@@ -61,22 +64,33 @@ class _OtherPageState extends State<OtherPage>
     _tabController = TabController(vsync: this, length: _tabList.length);
     channel.stream.listen((data) async {
       print(data);
-      print(jsonDecode(data)["code"].runtimeType);
-      if (jsonDecode(data)["code"].toString() != "") {
+      DbHandlers obj = new DbHandlers();
+        var res = await obj.GetUserFromTable();
+          await showNotification(
+              res[0].phone, jsonDecode(data)["message"].toString());
+      if(jsonDecode(data)["code"] != "#<REQUEST>#"){
+        messageSaveRes = await HTTP
+          .post("http://18.219.197.206:2643/save-message-online/", body: {
+        "data": jsonEncode({
+          "message": jsonDecode(data)["message"].toString(),
+          "receiver": jsonDecode(data)["receiver"].toString(),
+          "sender": jsonDecode(data)["sender"].toString(),
+          "sender_phone": jsonDecode(data)["sender_phone"].toString(),
+          "receiver_id": jsonDecode(data)["receiver_id"].toString(),
+        })
+      });
+      if (jsonDecode(data)["code"] != null) {
         print(jsonDecode(data)["code"]);
         DbHandlers obj = new DbHandlers();
-        var res = await obj.GetUserFromTable();
-        await showNotification(
-            res[0].phone, jsonDecode(data)["message"].toString());
-        
-        // obj.insertMessage(online_id, jsonDecode(data)["message"].toString(), res[0].online_id, int.parse(jsonDecode(data)["message"]), 0, 1);
+      obj.SaveMessageToTable(jsonDecode(messageSaveRes.body)["id"], jsonDecode(data)["message"], jsonDecode(data)["receiver_id"], jsonDecode(data)["sender"], 0, 1, jsonDecode(data)["sender_phone"]);
+
       }
       setState(() {
         if (_currentIndex != 3) {
           msg_seen = !msg_seen;
         }
       });
-    });
+    }});
   }
 
   showNotification(String sender, String message) async {

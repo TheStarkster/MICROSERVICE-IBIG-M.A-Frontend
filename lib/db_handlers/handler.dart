@@ -74,7 +74,7 @@ class DbHandlers with ChangeNotifier{
   // }
   Future<void> CreateMessageTable() async{
     final Database db = await OpenDB();
-    await db.execute('CREATE TABLE messages(id INTEGER PRIMARY KEY,online_id INTEGER, message TEXT, receiver INTEGER, sender INTEGER, read INTEGER,received INTEGER)');
+    await db.execute('CREATE TABLE messages(id INTEGER PRIMARY KEY,online_id INTEGER, message TEXT, receiver INTEGER, sender INTEGER, sender_phone STRING, read INTEGER,received INTEGER)');
   }
   Future<Object> GetMessagesFromTable() async{
     final Database db = await OpenDB();
@@ -92,12 +92,13 @@ class DbHandlers with ChangeNotifier{
           "read": maps[i]['read'],
           "received": maps[i]['received'],
           "message": maps[i]['message'],
+          "sender_phone": maps[i]['sender_phone'],
         };
       });
   }
-  Future<void> SaveMessageToTable(int online_id,String ifnotExistThenSave,int receiver, int sender,int read,int received) async{
+  Future<void> SaveMessageToTable(int online_id,String ifnotExistThenSave,int receiver, int sender,int read,int received,String sender_phone) async{
       final Database db = await OpenDB();
-      await insertMessage(online_id,ifnotExistThenSave,receiver, sender, read,received);
+      await insertMessage(online_id,ifnotExistThenSave,receiver, sender, read,received,sender_phone);
     }
   Map<String, dynamic> toMapUser(String phone,{String lname:"",String fname:"",int online_id, int received}){
     return {
@@ -105,14 +106,15 @@ class DbHandlers with ChangeNotifier{
       'online_id':online_id
     };
   }
-  Map<String, dynamic> toMapMessage(int online_id, String message, int receiver, int sender, int read,int received){
+  Map<String, dynamic> toMapMessage(int online_id, String message, int receiver, int sender, int read,int received,String sender_phone){
     return {
       'online_id': online_id,
       'message': message,
       'receiver':receiver,
       'sender':sender,
       'read':read,
-      'received':received
+      'received':received,
+      'sender_phone':sender_phone
     };
   }
   Map<String, dynamic> toMapMessageOnlyReceived(int received){
@@ -129,8 +131,8 @@ class DbHandlers with ChangeNotifier{
     final Database db = await OpenDB();
     await db.insert('users', toMapUser(phone,online_id: online_id), conflictAlgorithm: ConflictAlgorithm.replace);
   }
-  Future<void> insertMessage(int online_id,String message, int receiver, int sender, int read,int received) async{
+  Future<void> insertMessage(int online_id,String message, int receiver, int sender, int read,int received,String sender_phone) async{
     final Database db = await OpenDB();
-    await db.insert('messages', toMapMessage(online_id,message, receiver, sender, read,received),conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('messages', toMapMessage(online_id,message, receiver, sender, read,received,sender_phone),conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

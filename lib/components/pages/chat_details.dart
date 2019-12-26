@@ -319,7 +319,10 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatDetails extends StatefulWidget {
   final String receiver;
-  ChatDetails({this.receiver});
+  final WebSocketChannel channel;
+  final String ownerPhone;
+  final int receiver_id;
+  ChatDetails({this.receiver,this.channel,this.receiver_id,this.ownerPhone});
   @override
   _ChatDetailsState createState() => _ChatDetailsState();
 }
@@ -327,7 +330,6 @@ class ChatDetails extends StatefulWidget {
 class _ChatDetailsState extends State<ChatDetails> {
   TextEditingController _controller;
   int value;
-  
 
   @override
   void initState(){
@@ -384,19 +386,22 @@ class _ChatDetailsState extends State<ChatDetails> {
   }
 
   void _sendMessage() {
-    // if (_controller.text.isNotEmpty) {
-    //   widget.channel.sink.add(jsonEncode({
-    //     "message":_controller.text,
-    //     "receiver":"/"+ widget.receiver
-    //   }));
-    //   setState(() {
-    //       widget.messageList.insert(widget.messageList.length, 
-    //         Container(
-    //           child: Bubble(isMe: true,message: _controller.text)
-    //       ));
-    //     });
-    //   _controller.text = "";
-    // }
+    if (_controller.text.isNotEmpty) {
+      widget.channel.sink.add(jsonEncode({
+        "message":_controller.text,
+        "receiver":"/"+ "9871731421",
+        "sender":"74",
+        "sender_phone":widget.ownerPhone,
+        "receiver_id":widget.receiver_id
+      }));
+      // setState(() {
+      //     widget.messageList.insert(widget.messageList.length, 
+      //       Container(
+      //         child: Bubble(isMe: true,message: _controller.text)
+      //     ));
+      //   });
+      _controller.text = "";
+    }
   }
 
   // @override
