@@ -79,12 +79,8 @@ class _OtherPageState extends State<OtherPage>
           "receiver_id": jsonDecode(data)["receiver_id"].toString(),
         })
       });
-      if (jsonDecode(data)["code"] != null) {
-        print(jsonDecode(data)["code"]);
         DbHandlers obj = new DbHandlers();
-      obj.SaveMessageToTable(jsonDecode(messageSaveRes.body)["id"], jsonDecode(data)["message"], jsonDecode(data)["receiver_id"], jsonDecode(data)["sender"], 0, 1, jsonDecode(data)["sender_phone"]);
-
-      }
+          obj.SaveMessageToTable(jsonDecode(messageSaveRes.body)["id"], jsonDecode(data)["message"], jsonDecode(data)["receiver_id"], int.parse(jsonDecode(data)["sender"]),0, 1, jsonDecode(data)["sender_phone"]);
       setState(() {
         if (_currentIndex != 3) {
           msg_seen = !msg_seen;

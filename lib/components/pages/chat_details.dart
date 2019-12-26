@@ -389,7 +389,7 @@ class _ChatDetailsState extends State<ChatDetails> {
     if (_controller.text.isNotEmpty) {
       widget.channel.sink.add(jsonEncode({
         "message":_controller.text,
-        "receiver":"/"+ "9871731421",
+        "receiver":"/"+ widget.receiver,
         "sender":"74",
         "sender_phone":widget.ownerPhone,
         "receiver_id":widget.receiver_id

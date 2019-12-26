@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:ibig_play/components/pages/test_chat.dart';
 import 'package:ibig_play/components/utilities/custom_heading.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:ibig_play/components/pages/chat_details.dart';
@@ -288,6 +289,7 @@ class _MessageState extends State<MessagesWidget> {
                     StreamBuilder(
                       stream: bringUnreadMsg(),
                       builder: (context, snapshot) {
+                        var current_number = "";
                         if (snapshot.hasData) {
                           return ListView.builder(
                             itemCount: snapshot.data.length,
@@ -295,21 +297,35 @@ class _MessageState extends State<MessagesWidget> {
                             physics: ClampingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (BuildContext context, int index) {
-                              return UserMessageCard(
-                                message:
-                                    snapshot.data[index]["message"].toString(),
-                                userid:
-                                    snapshot.data[index]["sender"].toString(),
-                                isUnread:
-                                    snapshot.data[index]["read"].toString() ==
-                                            "0"
-                                        ? true
-                                        : false,
-                                channel: widget.channel,
-                                online_id: snapshot.data[index]["online_id"],
-                                local_id: snapshot.data[index]["id"],
-                                isRead: snapshot.data[index]["read"],
-                              );
+                              List<String> messageStream = [];
+                              if(snapshot.data[index]["sender_phone"].toString() != current_number){
+                                current_number =  snapshot.data[index]["sender_phone"].toString();
+                                for(var item in snapshot.data){
+                                  if(item["sender_phone"].toString() == current_number){
+                                    messageStream.insert(0, item["message"]);
+                                  }
+                                }
+                                return UserMessageCard(
+                                  message:
+                                      snapshot.data[index]["message"].toString(),
+                                  userid:
+                                      snapshot.data[index]["sender"].toString(),
+                                  isUnread:
+                                      snapshot.data[index]["read"].toString() ==
+                                              "0"
+                                          ? true
+                                          : false,
+                                  channel: widget.channel,
+                                  online_id: snapshot.data[index]["online_id"],
+                                  local_id: snapshot.data[index]["id"],
+                                  isRead: snapshot.data[index]["read"],
+                                  cardPhone: snapshot.data[index]["sender_phone"].toString(),
+                                  username: "",
+                                  phone: widget.phone,
+                                  messageStream: messageStream,
+                                );
+                              }
+                              return null;
                             },
                           );
                         } else {
@@ -327,17 +343,21 @@ class _MessageState extends State<MessagesWidget> {
 }
 
 class UserMessageCard extends StatefulWidget {
-  final String userid, message, phone;
+  final String userid, message, phone,cardPhone,username;
   final WebSocketChannel channel;
   final int online_id, local_id, isRead;
+  final List<String> messageStream;
   final bool isUnread;
 
   UserMessageCard(
       {this.userid,
       this.channel,
+      this.messageStream,
       this.message,
+      this.cardPhone,
       this.phone,
       this.online_id,
+      this.username,
       this.isUnread,
       this.local_id,
       this.isRead});
@@ -369,7 +389,8 @@ class _UserMessageCard extends State<UserMessageCard> {
             local_isUnread = false;
           });
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ChatDetails(channel: widget.channel,receiver_id: int.parse(widget.userid),ownerPhone: widget.phone,)));
+              context, MaterialPageRoute(builder: (context) => TestChat()));
+              // context, MaterialPageRoute(builder: (context) => ChatDetails(channel: widget.channel,receiver_id: int.parse(widget.userid),ownerPhone: widget.phone,receiver: widget.cardPhone)));
           DbHandlers obj = new DbHandlers();
           online_ID.insert(0, widget.online_id);
           local_ID.insert(0, widget.online_id);
@@ -414,7 +435,7 @@ class _UserMessageCard extends State<UserMessageCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.userid == null ? "userid" : widget.userid,
+                      widget.username == "" ? widget.cardPhone : widget.username,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -437,13 +458,13 @@ class _UserMessageCard extends State<UserMessageCard> {
                     Padding(
                       padding: EdgeInsets.only(top: 5),
                     ),
-                    Text(
-                      '11:00 AM',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    )
+                    // Text(
+                    //   '11:00 AM',
+                    //   style: TextStyle(
+                    //     color: Colors.grey,
+                    //     fontSize: 12,
+                    //   ),
+                    // )
                   ],
                 ),
               ),
